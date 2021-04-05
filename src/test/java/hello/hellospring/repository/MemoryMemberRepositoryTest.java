@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemoryMemberRepositoryTest {
@@ -68,4 +67,8 @@ public class MemoryMemberRepositoryTest {
         List<Member> result = repository.findAll();
         assertThat(result.size()).isEqualTo(2);
     }
+
 }
+
+
+

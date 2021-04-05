@@ -1,6 +1,7 @@
 package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
@@ -28,7 +29,7 @@ public class MemoryMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findByName(String name) {
         return store.values().stream().filter(member -> member.getName().equals(name)).findAny();
-        // stream 은 루프로 map의 value를 돌리는 역할, findany는 하나라도 찾는 역할이고 없으면 null 반
+        // stream 은 루프로 map의 value를 돌리는 역할, findany는 하나라도 찾는 역할이고 없으면 null 반환
     }
 
     @Override
