@@ -1,16 +1,16 @@
 package hello.hellospring;
 
+import hello.hellospring.aop.TimeTraceAop;
 import hello.hellospring.domain.Member;
-import hello.hellospring.repository.JdbcMemberRepository;
-import hello.hellospring.repository.JdbcTemplateMemberRepository;
-import hello.hellospring.repository.MemberRepository;
-import hello.hellospring.repository.MemoryMemberRepository;
+import hello.hellospring.repository.*;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
+import javax.swing.*;
 import javax.xml.crypto.Data;
 
 /**
@@ -23,28 +23,84 @@ import javax.xml.crypto.Data;
 
 @Configuration
 public class SpringConfig {
-    private DataSource dataSource;
+
+    // private DataSource dataSource;
+    //private EntityManager em;
+
+    private final MemberRepository memberRepository;
 
     /**
      * 스프링 컨피그는 이미 컴포넌트 설정을 통해 빈으로 등록되있으니까 의존성을 주입할때 오토 와이어드를 사용해야함.
+     * 이것은 JDBC와 JDBCTemplate을 쓸 때 사용하는 생성자
      * @param dataSource
      */
+    /**
+     @Autowired public SpringConfig(DataSource dataSource){
+     this.dataSource = dataSource;
+     }
+     */
+
+    /**
+     * JPA를 쓸때 사용하는 생성자
+     * @return
+     */
+    /*
     @Autowired
-    public SpringConfig(DataSource dataSource){
-        this.dataSource = dataSource;
-    }
-    @Bean
-    public MemberService memberService(){
-        return new MemberService(memberRepository()); // wired를 직접 해준다고 생각하면 됨.
+    public SpringConfig(EntityManager em){
+        this.em = em;
     }
 
-    @Bean
-    public MemberRepository memberRepository() {
-        //return new MemoryMemberRepository(); // 구조체
-       //return new JdbcMemberRepository(dataSource); // JDBC
-        return new JdbcTemplateMemberRepository(dataSource);
+    */
+
+    /**
+     * SPRING DATA JPA 사용할때 생성자
+     *
+     * @param memberRepository Spring Data Jpa를 memberRepository 를 바탕으로 구현해준것이므로 memberRepository를 springconfig에서 의존성 주입을 받고
+     *                         이것을 member service 에 의존성 주입해준다.
+     */
+
+    @Autowired
+    public SpringConfig(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
+
+
+    @Bean
+    public MemberService memberService() {
+        return new MemberService(memberRepository); // wired를 직접 해준다고 생각하면 됨.
+    }
+
+    //@Bean
+    //public MemberRepository memberRepository() {
+    //return new MemoryMemberRepository(); // 구조체
+    //return new JdbcMemberRepository(dataSource); // JDBC
+    // return new JdbcTemplateMemberRepository(dataSource); //JDBCTEMPLATE
+    // return new JpaMemberRepository(em); // JPA
+
+    // }
+
+/**
+
+ @Configuration
+
+ public class SpringConfig {
+
+ @Bean
+ public TimeTraceAop timeTraceAop() {
+ return new TimeTraceAop();
+ }
+ } AOP 객체를  따로 빈으로 등록할때 .
+
+
+ */
+
+
+
+
+
+
 }
+
 
 /*
 빈을 설정하는 법 에는 컨피그에 수동으로 어노테이션 넣어서 하는 법이랑 컴포넌트 설정해서 하는 법이 있는데

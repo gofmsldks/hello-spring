@@ -19,7 +19,7 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcTemplateMemberRepository(DataSource dataSource) {
-        this.jdbcTemplate = ataSource;
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 

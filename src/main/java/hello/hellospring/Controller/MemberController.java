@@ -34,6 +34,7 @@ public class MemberController {
     @Autowired        // 의존성 주입(Dependency injection , 의존적인 요소를 주입하는 것 , 여기서는 컨트롤러가 멤버 서비스에
     // 연결 되면서 컨트롤해야하는 멤버서비스의 객체를 컨트롤에 자동으로 주입.
     public MemberController(MemberService memberService) {
+        System.out.println(memberService.getClass());
         this.memberService = memberService;
     }
 
